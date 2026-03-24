@@ -7,12 +7,12 @@
 
 
 
-
+from cliente.stub import Stub
 from sys import argv
-import sys
+import sys, shlex
 from  shared.socket_utilities import PontoAcesso
 from shared.excepcoes import ExcepcaoConfiguracaoInvalida
-from cliente.rede import TCPSocketCliente
+
 
 def main():
     if len(argv) != 2:
@@ -28,19 +28,48 @@ def main():
         print("CLIENTE>", e)
         sys.exit(1) 
 
-    # TODO: chama funcoes no cliente para contactar o servidor e enviar mensagens
-    cliente = TCPSocketCliente(ponto_acesso)
+    # TODO: chama funcoes no cliente para contactar o servidor e enviar mensagensenviar_mensagem
+
+    id_perfil = int(input("Introduza o ID do Perfil (0=Anónimo, 1=Cliente, 2=Funcionario, 3=Admin):"))
+    id_user = int(input("Introduza o ID do Utilizador:"))
+    stub = Stub(ponto_acesso)
+
+    codigos_operacoes = {
+        "CRIA_CATEGORIA": 10100,
+        "LISTA_CATEGORIAS": 10200,
+        "REMOVE_CATEGORIA": 10300,
+        "CRIA_PRODUTO": 10400,
+    # ... adicionas os outros depois ...
+    }
+
     while True:
-        comando = input("CLIENTE> Introduza o comando: ")
-        if not comando.strip():
+        pedido_user = input("CLIENTE> Introduza o comando: ")
+        if not pedido_user.strip():
             continue
 
-        resposta = cliente.enviar_mensagem(comando)
-        print(f"SERVIDOR> {resposta}")
-
-        if comando.strip().upper() == "EXIT":
-            print("CLIENTE> A encerrar o cliente.")
+        if pedido_user.strip().lower() in ['exit', 'quit']:
+            stub.fechar_ligacao()
+            print("CLIENTE> A encerrar...")
             break
 
-if __name__ == "__main__":
-    main()
+        try:
+            pedido_partido = shlex.split(pedido_user)
+            if not pedido_partido:
+                continue
+
+            comando = pedido_partido[0].upper()
+            argumentos = pedido_partido[1:]
+
+            if comando not in codigos_operacoes:
+                print(f"CLIENTE> Comando '{comando}' desconhecido.")
+                continue
+
+            op_code = codigos_operacoes[comando]
+
+            pedido_em_lista = [op_code, argumentos, id_perfil, id_user]
+            resposta = stub.processa(pedido_em_lista)
+            print(f"SERVIDOR> {resposta}")
+
+        except Exception as e:
+            print(f"CLIENTE> Erro: {e}")
+
