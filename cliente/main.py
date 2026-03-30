@@ -39,7 +39,16 @@ def main():
         "LISTA_CATEGORIAS": 10200,
         "REMOVE_CATEGORIA": 10300,
         "CRIA_PRODUTO": 10400,
-    # ... adicionas os outros depois ...
+        "LISTA_PRODUTOS": 10500,
+        "AUMENTA_STOCK_PRODUTO": 10600,
+        "ATUALIZA_PRECO_PRODUTO": 10700,
+        "CRIA_CLIENTE": 10800,
+        "LISTA_CLIENTES": 10900,
+        "ADICIONA_PRODUTO_CARRINHO": 11000,
+        "REMOVE_PRODUTO_CARRINHO": 11100,
+        "LISTA_CARRINHO": 11200,
+        "CHECKOUT_CARRINHO": 11300,
+        "LISTA_ENCOMENDAS": 11400,
     }
 
     while True:
