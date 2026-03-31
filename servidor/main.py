@@ -9,46 +9,33 @@
 
 
 import sys
-from servidor.processador import Processador
-from servidor.rede import TCPSocketServidor
+from servidor.skeleton import Skeleton
 from shared.excepcoes import ExcepcaoConfiguracaoInvalida
 from shared.socket_utilities import PontoAcesso
 
 def main():
 
-    if len(sys.argv) != 2:
-        print("SERVIDOR> Uso: python -m servidor.main <porto>")
+    porto_servidor = 8888
+
+    if len(sys.argv) == 2:
+        porto_servidor = int(sys.argv[1])
+    elif len(sys.argv) > 2:
+        print("SERVIDOR> Uso: python -m servidor.main [porto]")
         sys.exit(1)
 
-    processador = Processador()
     try:
-        ponto_acesso = PontoAcesso(endereco_ip='localhost', porto = int(sys.argv[1]))  
-        print("SERVIDOR> Configuracao do servidor válida. ")
+        ponto_acesso = PontoAcesso(endereco_ip='127.0.0.1', porto=porto_servidor)  
+        print("SERVIDOR> Configuracao do servidor válida.")
 
     except ExcepcaoConfiguracaoInvalida as e:
-        print("SERVIDOR>", e)
+        print("SERVIDOR>", e.msg)
         sys.exit(1)
 
-    servidor = TCPSocketServidor(ponto_acesso)
-    #TODO: chamar funcoes de rede do servidor ...
-    #TODO: apagar e substituir código abaixo por código de sockets
-    
-    servidor.iniciar()
-    print("SERVIDOR> Servidor pronto para receber comandos. ")
-    
-    while True: 
-        conn_sock_cliente, comando = servidor.receber_mensagem()
-        if not comando.strip():
-            continue
+    skeleton = Skeleton(ponto_acesso)
 
-        print(f"SERVIDOR> Servidor recebeu comando: {comando}")
-        resposta = processador.processar_comando(comando)
-        servidor.responder(conn_sock_cliente, resposta)
-        
-        if comando.strip().upper() == 'EXIT':
-            print("SERVIDOR> A encerrar o servidor.") 
-            servidor.encerrar_server()
-            break
+    print(f"SERVIDOR> Servidor pronto em {ponto_acesso.endereco_ip}:{porto_servidor}")
+    
+    skeleton.iniciar_servidor()    
 
 if __name__ == "__main__":
     main()

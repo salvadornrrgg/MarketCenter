@@ -18,4 +18,4 @@ class Encomenda:
         Encomenda._contador_global += 1
 
     def obter_id(self): 
-        return self.id
+        return self.id_encomenda

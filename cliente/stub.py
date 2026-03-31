@@ -13,7 +13,7 @@ class Stub:
     
     def enviar_mensagem(self, pedido):
         pedido_bytes = pickle.dumps(pedido)
-        self.rede.enviar_mensagem(pedido_bytes)
+        self.rede.enviar_pedido(pedido_bytes)
 
     def receber_resposta(self):
         resposta_bytes = self.rede.receber_resposta()

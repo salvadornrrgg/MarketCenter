@@ -24,7 +24,7 @@ class TCPSocketCliente:
         self.sock.connect((self.ponto_acesso.endereco_ip, self.ponto_acesso.porto))
 
     # TODO: A completar
-    def enviar_mensagem(self, pedido_bytes):
+    def enviar_pedido(self, pedido_bytes):
         size_bytes = struct.pack('!I', len(pedido_bytes))
         self.sock.sendall(size_bytes)
         self.sock.sendall(pedido_bytes)

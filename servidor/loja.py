@@ -4,10 +4,7 @@
     # Tomás Farinha      64253
     #Este ficheiro é o "cérebro" da loja, é onde se aplicam as regras do negócio, onde são guardados, agora nesta fase, os dados em memoria em varios dicionarios, aqui é onde implementamos as funçoes que efetuam as condiçoes dos comandos escritos nas tabelas do enuciado
 # -----------------------------
-
-
 from shared.utilities import normalizar_nome
-#adicionamos excecao criadaS no excecoes.py
 from servidor.excepcoes import (
     ExcepcaoSupermercadoCategoriaJaExistente,
     ExcepcaoCategoriaNaoExiste,
@@ -25,7 +22,7 @@ from servidor.excepcoes import (
     ExcepcaoProdutoNaoNoCarrinho,
     ExcepcaoCarrinhoVazio,
 )
-#Adicionamos 
+ 
 from shared.categoria import Categoria
 from shared.produto import Produto
 from shared.cliente import Cliente
@@ -40,13 +37,16 @@ class Loja:
         self._clientes = {}
         self._encomendas = {}
 
-    @staticmethod
-    def reset(): 
+    def reset(self): 
         Categoria._contador_global = 1
-        # TODO: MUITO IMPORTANTE Completar esta funcao para Testes Unitários puderem executar sem problemas
         Produto._contador_global = 1
         Cliente._contador_global = 1
         Encomenda._contador_global = 1
+        
+        self._categorias.clear()
+        self._produtos.clear()
+        self._clientes.clear()
+        self._encomendas.clear()
 
 
     # -----------------------------
@@ -58,7 +58,7 @@ class Loja:
         if self.obter_id_categoria(nome) is not None:
             raise ExcepcaoSupermercadoCategoriaJaExistente(nome)
         categoria = Categoria(nome)
-        self._categorias[categoria.id] = categoria
+        self._categorias[categoria.id_categoria] = categoria
         return categoria
     
     #lista categorias 
@@ -95,9 +95,9 @@ class Loja:
     
 
     def obter_id_categoria(self, nome): 
-        for c in self._categorias.values(): 
-            if nome == c.nome: 
-                return c.id
+        for categoria in self._categorias.values(): 
+            if nome == categoria.nome: 
+                return categoria.id_categoria
         return None
     
     # -----------------------------
@@ -120,7 +120,7 @@ class Loja:
             raise ExcepcaoProdutoJaExistente(nome_produto)
         
         produto = Produto(nome_produto, nome_categoria, preco, quantidade)
-        self._produtos[produto.id] = produto
+        self._produtos[produto.id_produto] = produto
 
         return produto
 
@@ -174,9 +174,9 @@ class Loja:
 
 
     def obter_id_produto(self, nome):
-        for produto in self._produtos.values():
+        for produto in self._produtos.values(): 
             if nome == produto.nome:
-                return produto.id
+                return produto.id_produto
         return None
 
 
@@ -194,7 +194,7 @@ class Loja:
                 raise ExcepcaoEmailJaExistente(email)
 
         cliente = Cliente(nome_cliente, email, password)
-        self._clientes[cliente.id] = cliente
+        self._clientes[cliente.id_cliente] = cliente
 
         return cliente
     
@@ -292,7 +292,7 @@ class Loja:
         produtos_encomenda = cliente.carrinho_compras.copy()
 
         encomenda_nova = Encomenda(id_cliente, produtos_encomenda, total_valor_encomenda, data_atual)
-        self._encomendas[encomenda_nova.id] = encomenda_nova
+        self._encomendas[encomenda_nova.id_encomenda] = encomenda_nova
         
         cliente.carrinho_compras.clear()
 
