@@ -7,11 +7,19 @@ class Stub:
         
 
     def processa(self, pedido):
+        self.enviar_mensagem(pedido)
+        return self.receber_resposta()
+    
+    
+    def enviar_mensagem(self, pedido):
         pedido_bytes = pickle.dumps(pedido)
         self.rede.enviar_mensagem(pedido_bytes)
+
+    def receber_resposta(self):
         resposta_bytes = self.rede.receber_resposta()
         resposta = pickle.loads(resposta_bytes)
         return resposta
+
     
     def fechar_ligacao(self):
         self.rede.fechar()
