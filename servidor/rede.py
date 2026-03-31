@@ -33,9 +33,12 @@ class TCPSocketServidor:
         while len(dados_recebidos) < tamanho_desejado:
             bytes_em_falta = conn_sock.recv(tamanho_desejado - len(dados_recebidos))    
             if not bytes_em_falta:
+                if len(dados_recebidos) > 0:
+                    print("SERVIDOR> Erro 39911: Mensagem incompleta.")
+                else:
+                    print("SERVIDOR> Erro 39912: Ligação interrompida.")
                 return None       
             dados_recebidos.extend(bytes_em_falta)
-
         return bytes(dados_recebidos)
     
     def receber_pedido(self, conn_sock):
@@ -44,6 +47,11 @@ class TCPSocketServidor:
             return None
             
         size = struct.unpack('!I', size_bytes)[0]
+
+        if size <= 0 or size > 10485760: 
+            print(f"SERVIDOR> Erro 39910: Tamanho inválido ({size} bytes).")
+            return None
+        
         pedido_bytes = self.receive_all(conn_sock, size)
         return pedido_bytes
 

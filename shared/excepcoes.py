@@ -95,6 +95,7 @@ class OpCodes:
     CATEGORIA_JA_EXISTE = 30110
     CATEGORIA_NAO_EXISTE = 30310
     CATEGORIA_COM_PRODUTOS = 30311
+    CATEGORIA_NOME_INVALIDO = 30312 #ADICIONAMOS
 
     PRODUTO_JA_EXISTE = 30410
     CATEGORIA_NAO_EXISTE_PRODUTO = 30411
@@ -278,6 +279,13 @@ class CategoriaNaoExiste(ExcepcaoNegocio):
             OpCodes.CATEGORIA_NAO_EXISTE
         )
 
+class CategoriaNomeInvalido(ExcepcaoNegocio):
+    def __init__(self):
+        super().__init__(
+            "Nome da categoria inválido ou vazio após normalização.",
+            OpCodes.CATEGORIA_NOME_INVALIDO
+        )
+
 
 class CategoriaComProdutos(ExcepcaoNegocio):
     def __init__(self, nome):
@@ -311,7 +319,7 @@ class ClienteNaoExiste(ExcepcaoNegocio):
         )
 
 
-class EmailJaExiste(ExcepcaoNegocio): #ainda nao e para agora
+class EmailJaExiste(ExcepcaoNegocio): 
     def __init__(self):
         super().__init__(
             "Email já registado.",

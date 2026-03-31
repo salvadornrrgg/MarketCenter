@@ -5,9 +5,6 @@
     #Neste ficheiro é onde se arranca o servidor, ele fica `espera` que os clientes cheguem com os pedidos
 # -----------------------------
 
-
-
-
 import sys
 from servidor.skeleton import Skeleton
 from shared.excepcoes import ExcepcaoConfiguracaoInvalida

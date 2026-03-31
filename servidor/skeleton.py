@@ -25,16 +25,25 @@ class Skeleton:
     def processa_pedido(self, pedido_bytes):
         try:
             pedido_em_lista = pickle.loads(pedido_bytes)
-            
-            resposta_em_lista = self.processador.processa(pedido_em_lista)
-
-            resposta_bytes = pickle.dumps(resposta_em_lista)
-            
-            return resposta_bytes
-            
         except Exception as e:
-            print(f"SERVIDOR> Erro ao processar pedido no Skeleton: {e}")
+            print(f"SERVIDOR> Erro 39909: {e}")
+            return pickle.dumps([39909, ["Erro ao desserializar pedido (Pickle)"]])
+
+        if not isinstance(pedido_em_lista, list) or len(pedido_em_lista) != 4:
+            return pickle.dumps([39902, ["Mensagem mal formada: estrutura inesperada"]])
+        
+        try:
+            resposta_em_lista = self.processador.processa(pedido_em_lista)
+        except Exception as e:
+            print(f"SERVIDOR> Erro 39928: {e}")
             return pickle.dumps([39928, [str(e)]])
+
+        try:
+            resposta_bytes = pickle.dumps(resposta_em_lista)
+            return resposta_bytes
+        except Exception as e:
+            print(f"SERVIDOR> Erro 39908: {e}")
+            return pickle.dumps([39908, ["Erro ao serializar resposta (Pickle)"]])
 
 
     def get_loja(self):

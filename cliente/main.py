@@ -22,7 +22,6 @@ def main():
     id_user = int(sys.argv[3])
 
     try: 
-        # valida endereco_ip e porto (se erro ExcepcaoIPInvalido ou ExcepcaoPortoInvalido)
         ponto_acesso = PontoAcesso(endereco_ip = endereco_ip, porto = porto)
         print("CLIENTE> Configuracao do servidor válida. ")
         print("CLIENTE> Iniciando aplicação do lado do cliente. ")
