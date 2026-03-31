@@ -2,7 +2,7 @@ class Produto:
     _contador_global = 1
 
     def __init__(self, nome, categoria, preco, quantidade):
-        self.id = Produto._contador_global
+        self.id_produto = Produto._contador_global
         self.nome = nome
         self.categoria = categoria
         self.preco = preco

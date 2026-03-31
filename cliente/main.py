@@ -4,81 +4,62 @@
     # Tomás Farinha      64253
     # Este ficheiro é o ponto de arranque do cliente , é onde o programa arranca e é onde se monta a zona para o user escrever os comandos no terminal
 # -----------------------------
-
-
-
 from cliente.stub import Stub
+from cliente.processador_c import Processador
+import sys
 from sys import argv
-import sys, shlex
 from  shared.socket_utilities import PontoAcesso
-from shared.excepcoes import ExcepcaoConfiguracaoInvalida
+from shared.excepcoes import ExcepcaoConfiguracaoInvalida, ExcepcaoBase
 
 
 def main():
-    if len(argv) != 2:
-        print("CLIENTE> Uso: python -m cliente.main <porto>")
+    if len(argv) != 5:
+        print("CLIENTE> Uso: python -m cliente.main <endereco_ip> <porto> <id_perfil> <id_utilizador>")        
         sys.exit(1)
+
+    endereco_ip = sys.argv[1]
+    porto = int(sys.argv[2])
+    id_perfil = int(sys.argv[3])
+    id_user = int(sys.argv[4])
 
     try: 
         # valida endereco_ip e porto (se erro ExcepcaoIPInvalido ou ExcepcaoPortoInvalido)
-        ponto_acesso = PontoAcesso(endereco_ip = 'localhost', porto = int(argv[1]))
+        ponto_acesso = PontoAcesso(endereco_ip = endereco_ip, porto = porto)
         print("CLIENTE> Configuracao do servidor válida. ")
         print("CLIENTE> Iniciando aplicação do lado do cliente. ")
     except ExcepcaoConfiguracaoInvalida  as e: 
-        print("CLIENTE>", e)
+        print("CLIENTE>", e.msg)
         sys.exit(1) 
 
     # TODO: chama funcoes no cliente para contactar o servidor e enviar mensagensenviar_mensagem
 
-    id_perfil = int(input("Introduza o ID do Perfil (0=Anónimo, 1=Cliente, 2=Funcionario, 3=Admin):"))
-    id_user = int(input("Introduza o ID do Utilizador:"))
-    stub = Stub(ponto_acesso)
+    processador = Processador(ponto_acesso, id_perfil, id_user)
 
-    codigos_operacoes = {
-        "CRIA_CATEGORIA": 10100,
-        "LISTA_CATEGORIAS": 10200,
-        "REMOVE_CATEGORIA": 10300,
-        "CRIA_PRODUTO": 10400,
-        "LISTA_PRODUTOS": 10500,
-        "AUMENTA_STOCK_PRODUTO": 10600,
-        "ATUALIZA_PRECO_PRODUTO": 10700,
-        "CRIA_CLIENTE": 10800,
-        "LISTA_CLIENTES": 10900,
-        "ADICIONA_PRODUTO_CARRINHO": 11000,
-        "REMOVE_PRODUTO_CARRINHO": 11100,
-        "LISTA_CARRINHO": 11200,
-        "CHECKOUT_CARRINHO": 11300,
-        "LISTA_ENCOMENDAS": 11400,
-    }
 
     while True:
-        pedido_user = input("CLIENTE> Introduza o comando: ")
+        
+        pedido_user = input("Mensagem: ")
+        
         if not pedido_user.strip():
             continue
 
         if pedido_user.strip().lower() in ['exit', 'quit']:
-            stub.fechar_ligacao()
+            processador.fechar_ligacao()
             print("CLIENTE> A encerrar...")
             break
 
         try:
-            pedido_partido = shlex.split(pedido_user)
-            if not pedido_partido:
-                continue
+            
+            resultado = processador.processa(pedido_user)
 
-            comando = pedido_partido[0].upper()
-            argumentos = pedido_partido[1:]
+            if resultado:
+                print(resultado)
 
-            if comando not in codigos_operacoes:
-                print(f"CLIENTE> Comando '{comando}' desconhecido.")
-                continue
-
-            op_code = codigos_operacoes[comando]
-
-            pedido_em_lista = [op_code, argumentos, id_perfil, id_user]
-            resposta = stub.processa(pedido_em_lista)
-            print(f"SERVIDOR> {resposta}")
+        except ExcepcaoBase as e:
+            print(f"Erro: {e.msg}")
 
         except Exception as e:
-            print(f"CLIENTE> Erro: {e}")
+            print(f"Erro inesperado: {e}")
 
+if __name__ == '__main__':
+    main()

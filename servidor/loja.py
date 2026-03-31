@@ -26,10 +26,10 @@ from servidor.excepcoes import (
     ExcepcaoCarrinhoVazio,
 )
 #Adicionamos 
-from servidor.categoria import Categoria
-from servidor.produto import Produto
-from servidor.cliente import Cliente
-from servidor.encomenda import Encomenda
+from shared.categoria import Categoria
+from shared.produto import Produto
+from shared.cliente import Cliente
+from shared.encomenda import Encomenda
 from datetime import datetime
 
 class Loja:
