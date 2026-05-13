@@ -1,10 +1,12 @@
 import re
-
+from shared.excepcoes import TipoArgumentoInvalido
 #---------------------------
 # Normaliza comando textual
 #---------------------------
 
 def normalizar_nome(nome): 
+    if type(nome) is not str:
+        raise TipoArgumentoInvalido("nome")
     # remove espaços extremos
     nome = nome.strip()
 

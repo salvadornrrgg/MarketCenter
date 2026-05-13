@@ -154,6 +154,8 @@ class Processador:
     def _cmd_adiciona_produto_carrinho(self, argumentos, id_perfil, id_user):
         if id_perfil != 1: return [39921, ["Esta operação exige um utilizador autenticado."]] 
         if len(argumentos) < 2: return [39914, ["Faltam argumentos: nome e quantidade"]]
+        if type(argumentos[0]) is not str or type(argumentos[1]) is not int:
+            return [39915, ["Tipos de argumentos inválidos (esperado: string, int)."]]
         try:
             nome_produto = argumentos[0]
             quantidade = int(argumentos[1]) 
@@ -176,8 +178,10 @@ class Processador:
         if id_perfil != 1: return [39921, ["Operação exige login de cliente."]]
         try:
             categorias = list(self.loja.obter_todas_categorias().values())
-            carrinho_obj = self.loja.obter_todos_produtos_carrinho(id_user)
-            return [21200, [categorias, carrinho_obj]]
+
+            obje_carrinho = self.loja.obter_todos_produtos_carrinho(id_user)
+            
+            return [21200, [categorias, obje_carrinho]]
         except ExcepcaoBase as e: return [e.code, [e.msg]]
 
     def _cmd_checkout_carrinho(self, argumentos, id_perfil, id_user):
@@ -194,9 +198,8 @@ class Processador:
         if id_perfil == 0: return [39920, ["Acesso negado para utilizadores anónimos."]] 
         try:
             id_alvo = argumentos[0] if id_perfil in [2, 3] and len(argumentos) > 0 else id_user
-            cliente, encomendas = self.loja.obter_todas_encomendas(id_alvo)
-            
-            produtos_encomendas = [list(enc.produtos.keys()) for enc in encomendas]
+            cliente, encomendas, produtos_encomendas = self.loja.obter_todas_encomendas(id_alvo)
+
             return [21400, [encomendas, produtos_encomendas]]
         except ExcepcaoBase as e: return [e.code, [e.msg]]
         except Exception as e: return [31401, [str(e)]]

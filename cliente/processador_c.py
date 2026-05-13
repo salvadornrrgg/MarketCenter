@@ -45,6 +45,19 @@ class Processador:
             return f"Erro: O comando {comando_str} não é conhecido."
 
         op_code = self.codigos_operacoes[comando_str]
+
+        try:
+            if comando_str == "CRIA_PRODUTO":
+                argumentos[2] = float(argumentos[2]) 
+                argumentos[3] = int(argumentos[3])   
+            elif comando_str == "AUMENTA_STOCK_PRODUTO":
+                argumentos[1] = int(argumentos[1])
+            elif comando_str == "ATUALIZA_PRECO_PRODUTO":
+                argumentos[1] = float(argumentos[1])
+            elif comando_str == "ADICIONA_PRODUTO_CARRINHO":
+                argumentos[1] = int(argumentos[1])
+        except ValueError:
+            return "Erro no cliente: Escreveste texto onde devia estar um número!"
         
         pedido_em_lista = [op_code, argumentos, self.idPerfil, self.id_user]
         print(f"Pedido: {pedido_em_lista}")
@@ -65,8 +78,8 @@ class Processador:
             return f"Categoria {categoria.nome} criada com sucesso."
             
         elif comando_str == "LISTA_CATEGORIAS":
-            categorias = list(lista_resposta[0].values()) if isinstance(lista_resposta[0], dict) else lista_resposta[0]
-            produtos = list(lista_resposta[1].values()) if isinstance(lista_resposta[1], dict) else lista_resposta[1]
+            categorias = lista_resposta[0]
+            produtos = lista_resposta[1]
             
             res = f"Total Categorias: {len(categorias)}\nTotal Produtos: {len(produtos)}\n\n"
             for cat in categorias:

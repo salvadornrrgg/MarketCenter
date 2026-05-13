@@ -1,0 +1,25 @@
+Erros Corrigidos (FASE 2)
+
+1) Tipo no Servidor (Erro 39915):
+    Erro: O servidor tentava converter strings em números ou aceitava tipos errados
+    Correção: Adicionamos validação rigorosa com if type(...) is not no Processador do servidor para garantir que os dados são do tipo exato (int/str) antes de os processar.
+
+2) Conversão de Input no Cliente:
+    Erro: O cliente enviava tudo como texto (string) devido ao shlex.split.
+    Correção: Adicionamos um bloco de conversão (int() e float()) no cliente para garantir que os números viajam pela rede com o tipo correto.
+
+3) Retorno do Carrinho (Objetos vs Dicionários):
+    Erro: O servidor devolvia apenas IDs (inteiros) ou dicionários, fazendo os testes dos professores crasharem ao tentar ler produto.nome.
+    Correção: A função da Loja foi alterada para reconstruir e devolver uma lista de objetos Produto reais.
+
+4) Formatação das Encomendas:
+    Erro: A listagem de encomendas enviava apenas as chaves dos produtos (IDs).
+    Correção: Atualizamos a lógica para converter os IDs em objetos Produto completos, permitindo que o cliente veja os detalhes de cada item comprado.
+
+5) Crash na Normalização de Nomes:
+    Erro: A função normalizar_nome crashava o servidor se recebesse um número em vez de texto (AttributeError).
+    Correção: Adicionamos uma proteção que verifica se o input é texto antes de tentar limpar espaços ou formatar a string.
+
+6) Integridade do Contador de IDs:
+    Erro: Criar novos objetos para mostrar o carrinho estava a fazer o contador global de IDs saltar números.
+    Correção: usamos copy.copy() para clonar produtos existentes sem ativar o construtor, mantendo os IDs originais e o contador global intacto.

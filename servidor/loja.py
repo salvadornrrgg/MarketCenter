@@ -4,6 +4,7 @@
     # Tomás Farinha      64253
     #Este ficheiro é o "cérebro" da loja, é onde se aplicam as regras do negócio, onde são guardados, agora nesta fase, os dados em memoria em varios dicionarios, aqui é onde implementamos as funçoes que efetuam as condiçoes dos comandos escritos nas tabelas do enuciado
 # -----------------------------
+import copy
 from shared.utilities import normalizar_nome
 from shared.excepcoes import (
     CategoriaJaExiste,
@@ -266,7 +267,18 @@ class Loja:
             raise ClienteNaoExiste()
         cliente = self._clientes[id_cliente]
 
-        return cliente.carrinho_compras
+        lista_objetos_produto = []
+        
+        for id_prod, quantidade_no_carrinho in cliente.carrinho_compras.items():
+            produto_original = self._produtos[id_prod]
+
+            produto_para_rede = copy.copy(produto_original)
+            
+            produto_para_rede.quantidade = quantidade_no_carrinho
+
+            lista_objetos_produto.append(produto_para_rede)
+
+        return lista_objetos_produto
 
     #fazer checkout do carrinho de compras
     def fazer_checkout_carrinho(self, id_cliente):
@@ -311,10 +323,23 @@ class Loja:
         cliente = self._clientes[id_cliente]
 
         encomendas_cliente = []
+        produtos_das_encomendas = []
         for encomenda in self._encomendas.values():
             if encomenda.id_cliente == id_cliente:
                 encomendas_cliente.append(encomenda)
+
+                lista_prods_desta_encomenda = []
+                for id_prod, qtd_comprada in encomenda.produtos.items():
+                    produto_original = self._produtos[id_prod]
+                    
+                    produto_para_rede = copy.copy(produto_original)
+                    produto_para_rede.quantidade = qtd_comprada 
+                    
+                    lista_prods_desta_encomenda.append(produto_para_rede)
+                
+                produtos_das_encomendas.append(lista_prods_desta_encomenda)
         
-        return cliente, encomendas_cliente
+        return cliente, encomendas_cliente, produtos_das_encomendas
+       
         
         
