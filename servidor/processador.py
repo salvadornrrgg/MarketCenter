@@ -87,7 +87,6 @@ class Processador:
         if id_perfil not in [2, 3]: return [39920, ["Acesso negado: Perfil insuficiente para criar produtos."]]
         if len(argumentos) < 4: return [39914, ["Faltam dados: Nome, Categoria, Preço, Stock."]]
         try:
-            # Conversão de tipos para evitar TypeError na Loja
             nome_prod = argumentos[0]
             nome_cat = argumentos[1]
             preco = float(argumentos[2]) 
