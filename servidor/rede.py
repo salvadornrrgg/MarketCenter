@@ -8,6 +8,7 @@
 
 import socket, sys, struct
 import select as sel
+import ssl
 from shared.socket_utilities import PontoAcesso
 
 class TCPSocketServidor:
@@ -20,6 +21,13 @@ class TCPSocketServidor:
     """
 
     def __init__(self, ponto_acesso):
+                
+        self.context = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
+
+        self.context.verify_mode = ssl.CERT_NONE
+
+        self.context.load_cert_chain(certfile='serv.crt', keyfile='serv.key')
+
         self.ponto_acesso = ponto_acesso
         self.sock_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -74,9 +82,12 @@ class TCPSocketServidor:
                         break
                 elif sock is self.sock_server:
                     (conn_sock, addr) = self.sock_server.accept()
-                    ip, port = conn_sock.getpeername()
+
+                    conn_sock_embrulhado = self.context.wrap_socket(conn_sock, server_side=True)
+
+                    ip, port = conn_sock_embrulhado.getpeername()
                     print('Novo cliente ligado desde %s:%d' % (ip, port))
-                    self.socket_list.append(conn_sock)
+                    self.socket_list.append(conn_sock_embrulhado)
                 else:
                     try:
                         pedido_bytes = self.receber_pedido(sock)

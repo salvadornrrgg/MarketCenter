@@ -1,4 +1,4 @@
-from cliente.rede import TCPSocketCliente
+from cliente.rede_c import TCPSocketCliente
 import pickle
 
 class Stub: 
