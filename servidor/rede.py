@@ -5,7 +5,6 @@
     #Neste ficheiro recebe se o pedido do cliente e lê se o texto, ele entrega o pedido ao processador.py, ele pega na resposta final do processador e devolve pela rede ao cliente
 # -----------------------------
 
-
 import socket, sys, struct
 import select as sel
 import ssl

@@ -2,8 +2,15 @@
 # GRUPO 09    
 # Salvador Gonçalves   64162
 # Tomás Farinha        64253
+# Este ficheiro é o "cérebro" do servidor. Ele recebe os pedidos 
+# já descodificados pelo Skeleton e executa a lógica de negócio real na loja
+# É aqui que se validam as permissões (quem pode criar o quê), 
+# se alteram os stocks e se geram as encomendas. O processador decide 
+# se a operação foi um sucesso, 2xxxx, ou um erro, série 3xxxx.
 # -----------------------------
+
 from shared.excepcoes import ExcepcaoBase
+from shared.excepcoes import OpCodes
 
 class Processador:
 
@@ -49,10 +56,15 @@ class Processador:
             if op_code in self.HANDLERS:
                 return self.HANDLERS[op_code](argumentos, id_perfil, id_user)
             
+            if op_code == OpCodes.SYNC_LOJA:
+                estado = self.skeleton.get_loja().obter_estado()
+                return [OpCodes.OK_SYNC_LOJA, estado]
+
             return [39901, ["Código de operação inválido"]]
 
         except Exception as e:
             return [39928, [str(e)]]
+
 
     # --- CATEGORIAS ---
 
@@ -81,6 +93,7 @@ class Processador:
         except ExcepcaoBase as e: return [e.code, [e.msg]] 
         except Exception as e: return [30301, [str(e)]]
         
+
     # --- PRODUTOS ---
 
     def _cmd_cria_produto(self, argumentos, id_perfil, id_user):
@@ -110,7 +123,6 @@ class Processador:
         if id_perfil not in [2, 3]: return [39920, ["Acesso negado para aumentar stock."]]
         if len(argumentos) < 2: return [39914, ["Faltam argumentos: nome e quantidade"]]
         try:
-            # NOVO: Cast para int para evitar erro de comparação na Loja
             qtd = int(argumentos[1])
             produto = self.loja.aumentar_stock_produto(argumentos[0], qtd)
             return [20600, [produto]]
@@ -122,13 +134,13 @@ class Processador:
         if id_perfil not in [2, 3]: return [39920, ["Acesso negado para atualizar preços."]]
         if len(argumentos) < 2: return [39914, ["Faltam argumentos: nome e preço"]]
         try:
-            # NOVO: Cast para float
             preco = float(argumentos[1])
             produto = self.loja.atualizar_preco_produto(argumentos[0], preco)
             return [20700, [produto]]
         except (ValueError, TypeError): return [39915, ["O preço deve ser um número decimal."]]
         except ExcepcaoBase as e: return [e.code, [e.msg]]
         except Exception as e: return [30701, [str(e)]]
+
 
     # --- CLIENTES ---
 
@@ -147,6 +159,7 @@ class Processador:
             clientes = list(self.loja.obter_todos_clientes().values())
             return [20900, [clientes]]
         except Exception as e: return [30901, [str(e)]]
+
 
     # --- CARRINHO ---
 
@@ -190,6 +203,7 @@ class Processador:
             return [21300, [encomenda]]
         except ExcepcaoBase as e: return [e.code, [e.msg]]
         except Exception as e: return [31301, [str(e)]]
+
 
     # --- ENCOMENDAS ---
 

@@ -1,12 +1,15 @@
 # -----------------------------
-# GRUPO 09    
-# Salvador Gonçalves   64162
-# Tomás Farinha        64253
+    # GRUPO 09    
+    # Salvador Gonçalves   64162
+    # Tomás Farinha        64253
+    #Este ficheiro funciona como o "tradutor" e validador do lado do cliente.
+    #Recebe o texto escrito no terminal, converte os comandos nos OpCodes corretos
+    #empacota tudo para o Stub. Quando a resposta do servidor chega, ele 
+    # transforma os dados brutos numa mensagem  para o ecrã.
 # -----------------------------
 
 from cliente.stub import Stub
 import shlex
-from shared.socket_utilities import PontoAcesso
 from shared.excepcoes import OpCodes, ExcepcaoBase
 
 class Processador:
@@ -71,7 +74,6 @@ class Processador:
             
             raise ExcepcaoBase(msg_erro, op_code_resposta)
 
-        
 
         if comando_str == "CRIA_CATEGORIA":
             categoria = lista_resposta[0]

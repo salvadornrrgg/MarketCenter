@@ -53,6 +53,8 @@ class OpCodes:
 
     LISTA_ENCOMENDAS = 11400
 
+    SYNC_LOJA = 19999
+
     # -------------------------
     # SUCESSO (2xxxx)
     # -------------------------
@@ -75,6 +77,8 @@ class OpCodes:
 
     OK_LISTA_ENCOMENDAS = 21400
 
+    OK_SYNC_LOJA = 29999
+
     # -------------------------
     # ERROS GENÉRICOS (39xxx)
     # -------------------------
@@ -95,7 +99,7 @@ class OpCodes:
     CATEGORIA_JA_EXISTE = 30110
     CATEGORIA_NAO_EXISTE = 30310
     CATEGORIA_COM_PRODUTOS = 30311
-    CATEGORIA_NOME_INVALIDO = 30312 #ADICIONAMOS
+    CATEGORIA_NOME_INVALIDO = 30312 
 
     PRODUTO_JA_EXISTE = 30410
     CATEGORIA_NAO_EXISTE_PRODUTO = 30411
@@ -130,6 +134,8 @@ class OpCodes:
     FALHA_ENCOMENDA = 31312
 
     CLIENTE_NAO_EXISTE_ENCOMENDAS = 31410
+
+
 
 
 #--------------------------------------------------

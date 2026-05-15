@@ -4,11 +4,12 @@
     # Tomás Farinha      64253
     # Este ficheiro é o ponto de arranque do cliente , é onde o programa arranca e é onde se monta a zona para o user escrever os comandos no terminal
 # -----------------------------
+
 from cliente.processador_c import Processador
 import sys
 from sys import argv
 from  shared.socket_utilities import PontoAcesso
-from shared.excepcoes import ExcepcaoConfiguracaoInvalida, ExcepcaoBase
+from shared.excepcoes import ExcepcaoBase
 
 
 def main():

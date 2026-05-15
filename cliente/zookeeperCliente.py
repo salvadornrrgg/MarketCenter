@@ -1,3 +1,12 @@
+# -----------------------------
+    # GRUPO 09    
+    # Salvador Gonçalves   64162
+    # Tomás Farinha        64253
+    # Este ficheiro é o "olheiro" do cliente. Ele liga-se ao ZooKeeper, 
+    # vigia a lista de servidores ativos e avisa o Stub sempre que a 
+    # Head (para escritas) ou a Tail (para leituras) mudam de endereço.
+# -----------------------------
+
 from kazoo.client import KazooClient
 
 class ZooKeeperClient(): 
@@ -15,7 +24,7 @@ class ZooKeeperClient():
 
 
     def reagir_mudancas(self, children_nodes):
-        print(f"\nCLIENTE-ZK> [VIGIA ATIVADO] A lista de servidores em /chain mudou!")
+        print(f"\nCLIENTE-ZK> [WATCHER]  A lista de servidores em /chain mudou!")
         
         if not children_nodes:
             print("CLIENTE-ZK> ALERTA: Não há servidores vivos na cadeia!")

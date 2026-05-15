@@ -4,6 +4,7 @@
     # Tomás Farinha      64253
     #Este ficheiro é o "cérebro" da loja, é onde se aplicam as regras do negócio, onde são guardados, agora nesta fase, os dados em memoria em varios dicionarios, aqui é onde implementamos as funçoes que efetuam as condiçoes dos comandos escritos nas tabelas do enuciado
 # -----------------------------
+
 import copy
 from shared.utilities import normalizar_nome
 from shared.excepcoes import (
@@ -47,7 +48,20 @@ class Loja:
         self._clientes.clear()
         self._encomendas.clear()
 
-
+    def obter_estado(self):
+        return {
+            "categorias": self._categorias,
+            "produtos": self._produtos,
+            "clientes": self._clientes,
+            "encomendas": self._encomendas
+        }
+    
+    def importar_estado(self, dados):
+        self._categorias = dados.get("categorias", {})
+        self._produtos = dados.get("produtos", {})
+        self._clientes = dados.get("clientes", {})
+        self._encomendas = dados.get("encomendas", {})
+        
     # -----------------------------
     # Categorias
     # -----------------------------

@@ -5,7 +5,6 @@
     # Este ficheiro é a camada de transporte do cliente como se fosse um estafeta, aqui é onde se leva a mensagem de texto do cliente pela rede até ao servidor e trás a resposta de volta
 # -----------------------------
 
-
 import socket, struct
 from shared.socket_utilities import PontoAcesso
 import ssl

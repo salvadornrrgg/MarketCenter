@@ -1,4 +1,15 @@
-from cliente.rede_c import TCPSocketCliente
+# -----------------------------
+    # GRUPO 09    
+    # Salvador Gonçalves   64162
+    # Tomás Farinha        64253
+    # Este ficheiro atua como o representante do servidor no cliente. 
+    # Para o Processador, parece que as funções da loja estão a correr localmente, 
+    # mas na verdade, o Stub apenas serializa (empacota) os dados e envia-os pela 
+    # rede. Além disso, é ele que faz a gestão inteligente do trânsito: encaminha 
+    # as operações de escrita para a Head e as de leitura para a Tail!
+# -----------------------------
+
+from cliente.rede import TCPSocketCliente
 from cliente.zookeeperCliente import ZooKeeperClient
 from shared.excepcoes import OpCodes
 from shared.socket_utilities import PontoAcesso
@@ -7,12 +18,11 @@ import pickle
 
 class Stub: 
     def __init__(self, hosts_zk):
-        self.zookeeper = ZooKeeperClient(self.atualizar_ligacoes, hosts_zk)
-        self.zookeeper.connect()
         self.rede_head = None
         self.rede_tail = None
-        self.operacoes = OpCodes
-
+        self.zookeeper = ZooKeeperClient(self.atualizar_ligacoes, hosts_zk)
+        self.zookeeper.connect()
+        
     def atualizar_ligacoes(self, ponto_acesso_head, ponto_acesso_tail):
         print("STUB> O ZooKeeper avisou-me de mudanças! A reconfigurar ligações...")
 
@@ -74,7 +84,6 @@ class Stub:
         resposta = pickle.loads(resposta_bytes)
         return resposta
 
-    
     def fechar_ligacao(self):
         if self.rede_head: 
             self.rede_head.fechar()
