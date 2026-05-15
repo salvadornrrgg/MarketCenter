@@ -65,6 +65,7 @@ utilizam igualmente sockets SSL, garantindo que nenhum dado circula em texto lim
 Recuperação Automática de Ligações: 
 O Stub do cliente foi desenhado para ser resiliente. Sempre que o ZooKeeper deteta uma falha na Head ou Tail, o Stub reconstrói os objetos de rede automaticamente sem que o utilizador precise de reiniciar o cliente ou reintroduzir comandos.
 
+Criamos o script "testar_tudo.sh" para correr todos os comandos e funcionalidades 
 
 ## Como Preparar o Ambiente (Antes de Correr)
 

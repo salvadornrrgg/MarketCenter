@@ -13,16 +13,31 @@ from shared.excepcoes import ExcepcaoBase
 
 
 def main():
-    if len(argv) != 5:
-        print("CLIENTE> Uso: python -m cliente.main <ip_zookeeper> <porto_zookeeper> <id_perfil> <id_utilizador>")        
+    if len(argv) != 3:
+        print("CLIENTE> Uso: python -m cliente.main <ip_zookeeper> <porto_zookeeper>")        
         sys.exit(1)
 
     ip_zookeeper = sys.argv[1]
     porto_zookeeper = sys.argv[2]
-    id_perfil = int(sys.argv[3])
-    id_user = int(sys.argv[4])
-
     hosts_zk = f"{ip_zookeeper}:{porto_zookeeper}"
+
+    print("=========================================")
+    print("        BEM-VINDO AO MARKETCENTER        ")
+    print("=========================================")
+    print("Perfis disponíveis:")
+    print("  0 - Cliente Anónimo (Apenas para criar conta)")
+    print("  1 - Cliente Registado (Para fazer compras)")
+    print("  2 - Funcionário")
+    print("  3 - Administrador (Para gerir loja)")
+    print("-----------------------------------------")
+    
+    try:
+        id_perfil = int(input("Introduz o teu Perfil (0-3): "))
+        id_user = int(input("Introduz o teu ID de Utilizador: "))
+    except ValueError:
+        print("CLIENTE> Erro: O Perfil e o ID têm de ser números inteiros!")
+        sys.exit(1)
+        
     print(f"CLIENTE> A iniciar e a ligar ao ZooKeeper em {hosts_zk}...")
 
 
