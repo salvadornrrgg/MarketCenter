@@ -10,6 +10,7 @@ from servidor.rede import TCPSocketServidor
 from servidor.loja import Loja
 from servidor.processador import Processador
 import pickle
+from servidor.zookeeperServidor import ZooKeeperServidor
 
 class Skeleton:
 
@@ -17,9 +18,11 @@ class Skeleton:
         self.rede = TCPSocketServidor(ponto_acesso)
         self.loja = Loja()
         self.processador = Processador(self)
+        self.zookeeper = ZooKeeperServidor(ponto_acesso.porto)
 
     def iniciar_servidor(self):
         print("SERVIDOR> A iniciar serviços...")
+        self.zookeeper.connect()
         self.rede.aceitar(self.processa_pedido)
 
     def processa_pedido(self, pedido_bytes):
@@ -48,6 +51,11 @@ class Skeleton:
 
     def get_loja(self):
         return self.loja
+    
+    def encerrar_servidor(self):
+        print("SERVIDOR> A fechar ligações...")
+        self.zookeeper.close() 
+        self.rede.fechar_tudo()
 
 
 

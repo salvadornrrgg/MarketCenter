@@ -12,26 +12,22 @@ from shared.excepcoes import ExcepcaoConfiguracaoInvalida, ExcepcaoBase
 
 
 def main():
-    if len(argv) != 4:
-        print("CLIENTE> Uso: python -m cliente.main <porto> <id_perfil> <id_utilizador>")        
+    if len(argv) != 5:
+        print("CLIENTE> Uso: python -m cliente.main <ip_zookeeper> <porto_zookeeper> <id_perfil> <id_utilizador>")        
         sys.exit(1)
 
-    endereco_ip = "127.0.0.1"
-    porto = int(sys.argv[1])
-    id_perfil = int(sys.argv[2])
-    id_user = int(sys.argv[3])
+    ip_zookeeper = sys.argv[1]
+    porto_zookeeper = sys.argv[2]
+    id_perfil = int(sys.argv[3])
+    id_user = int(sys.argv[4])
 
-    try: 
-        ponto_acesso = PontoAcesso(endereco_ip = endereco_ip, porto = porto)
-        print("CLIENTE> Configuracao do servidor válida. ")
-        print("CLIENTE> Iniciando aplicação do lado do cliente. ")
-    except ExcepcaoConfiguracaoInvalida  as e: 
-        print("CLIENTE>", e.msg)
-        sys.exit(1) 
+    hosts_zk = f"{ip_zookeeper}:{porto_zookeeper}"
+    print(f"CLIENTE> A iniciar e a ligar ao ZooKeeper em {hosts_zk}...")
+
 
     # TODO: chama funcoes no cliente para contactar o servidor e enviar mensagensenviar_mensagem
 
-    processador = Processador(ponto_acesso, id_perfil, id_user)
+    processador = Processador(hosts_zk, id_perfil, id_user)
 
 
     while True:

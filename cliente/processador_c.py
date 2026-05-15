@@ -11,8 +11,8 @@ from shared.excepcoes import OpCodes, ExcepcaoBase
 
 class Processador:
 
-    def __init__(self, ponto_acesso, id_perfil, id_user):
-        self.stub = Stub(ponto_acesso)
+    def __init__(self, hosts_zk, id_perfil, id_user):
+        self.stub = Stub(hosts_zk)
         self.idPerfil = id_perfil
         self.id_user = id_user
 
