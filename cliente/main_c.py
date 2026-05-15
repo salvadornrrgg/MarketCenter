@@ -22,8 +22,9 @@ def main():
     hosts_zk = f"{ip_zookeeper}:{porto_zookeeper}"
 
     print("=========================================")
-    print("        BEM-VINDO AO MARKETCENTER        ")
+    print("        SEJA BEM-VINDO AO MARKETPLACE       ")
     print("=========================================")
+
     print("Perfis disponíveis:")
     print("  0 - Cliente Anónimo (Apenas para criar conta)")
     print("  1 - Cliente Registado (Para fazer compras)")
