@@ -10,8 +10,9 @@ echo "======================================================"
 sleep 1
 
 echo -e "\n---> [PASSO 1] ADMINISTRADOR: A PREPARAR A LOJA E PRODUTOS"
-# Passa os 4 argumentos logo aqui: IP, Porto, Perfil (3) e ID (1)
-python3 -m cliente.main_c $IP_ZK $PORTA_ZK 3 1 <<EOF
+python3 -m cliente.main_c $IP_ZK $PORTA_ZK <<EOF
+3
+1
 CRIA_CATEGORIA Fruta
 CRIA_CATEGORIA Laticinios
 CRIA_CATEGORIA Lixo
@@ -26,16 +27,18 @@ EOF
 sleep 1
 
 echo -e "\n---> [PASSO 2] CLIENTE ANÓNIMO: A CRIAR CONTA"
-# Perfil 0, ID 999
-python3 -m cliente.main_c $IP_ZK $PORTA_ZK 0 999 <<EOF
+python3 -m cliente.main_c $IP_ZK $PORTA_ZK <<EOF
+0
+999
 CRIA_CLIENTE Joao joao@mail.com 1234
 exit
 EOF
 sleep 1
 
 echo -e "\n---> [PASSO 3] CLIENTE REGISTADO: A FAZER COMPRAS"
-# Perfil 1, ID 1
-python3 -m cliente.main_c $IP_ZK $PORTA_ZK 1 1 <<EOF
+python3 -m cliente.main_c $IP_ZK $PORTA_ZK <<EOF
+1
+1
 ADICIONA_PRODUTO_CARRINHO Bananas 10
 ADICIONA_PRODUTO_CARRINHO Leite 5
 LISTA_CARRINHO
@@ -49,8 +52,9 @@ EOF
 sleep 1
 
 echo -e "\n---> [PASSO 4] FUNCIONÁRIO/ADMIN: VALIDAÇÕES FINAIS"
-# Perfil 2, ID 1
-python3 -m cliente.main_c $IP_ZK $PORTA_ZK 2 1 <<EOF
+python3 -m cliente.main_c $IP_ZK $PORTA_ZK <<EOF
+2
+1
 LISTA_CLIENTES
 LISTA_PRODUTOS
 exit
