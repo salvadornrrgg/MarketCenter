@@ -213,6 +213,6 @@ class Processador:
             id_alvo = argumentos[0] if id_perfil in [2, 3] and len(argumentos) > 0 else id_user
             cliente, encomendas, produtos_encomendas = self.loja.obter_todas_encomendas(id_alvo)
 
-            return [21400, [encomendas, produtos_encomendas]]
+            return [21400, [cliente, encomendas, produtos_encomendas]]
         except ExcepcaoBase as e: return [e.code, [e.msg]]
         except Exception as e: return [31401, [str(e)]]
